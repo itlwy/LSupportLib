@@ -2,6 +2,7 @@ package support.utils.cache;
 
 import java.io.File;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -80,13 +81,13 @@ public class ImageCache {
 	}
 	/**
 	 * 初始化图片缓存区大小
-	 * @param RAMSize  内存最大空间
-	 * @param DiskSize  SD卡存储最大空间
+	 * @param RAMSize  内存最大空间  (0为采用默认大小)
+	 * @param DiskSize  SD卡存储最大空间(0为采用默认大小)
 	 * @date 2015-9-25 下午4:44:10
 	 */
 	public void setParams(int RAMSize,int DiskSize){
-		MAXSIZE = RAMSize;
-		DIS_CACHE_SIZE = DiskSize;
+		MAXSIZE = RAMSize == 0?MAXSIZE:RAMSize;
+		DIS_CACHE_SIZE = DiskSize == 0?DIS_CACHE_SIZE:DiskSize;
 	}
 	/**
 	 * 获得Bitmap所占内存大小
@@ -94,7 +95,7 @@ public class ImageCache {
 	 * @return
 	 * @date 2015-9-25 下午4:40:24
 	 */
-	private int getSize(Bitmap value) {
+	@SuppressLint("NewApi") private int getSize(Bitmap value) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
 			return value.getByteCount();
 		}
