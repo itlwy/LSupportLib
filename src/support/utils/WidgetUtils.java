@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import support.customui.widget.CProgressDialog;
+import support.utils.bean.XY;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -23,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -103,6 +105,7 @@ public class WidgetUtils {
 		void onItemClick(AdapterView<?> parent, View view, int position,
 				long id);
 	}
+	
 	/**
 	 * 自定义单选对话框
 	 * @param a
@@ -143,24 +146,43 @@ public class WidgetUtils {
     } 
 	/**
 	 * 弹出web端对话框
-	 * 
+	 * xy置null即采用默认宽高
 	 * @param a
 	 * @param view2015
 	 *            -6-29备注
 	 */
-	public static AlertDialog showWebDialog(Activity a, View view) {
+	public static AlertDialog showWebDialog(Activity a, View view,XY xy) {
 		WindowManager m = a.getWindowManager();
 		Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
 		AlertDialog.Builder builder = new AlertDialog.Builder(a);
 		final AlertDialog dialog = builder.create();
-//		final CProgressDialog dialog = CProgressDialog.createAskNoDialog(a,view);
 		dialog.setView(view, 0, 0, 0, 0);
 		dialog.show();
 		Window window = dialog.getWindow();
 		WindowManager.LayoutParams p = window.getAttributes(); // 获取对话框当前的参数值
-		p.height = (int) (d.getHeight() * 0.5); // 高度设置为屏幕的0.5
-		p.width = (int) (d.getWidth() * 0.9); // 宽度设置为屏幕的0.8
+		if(xy == null){
+			p.height = (int) (d.getHeight() * 0.5); // 高度设置为屏幕的0.5
+			p.width = (int) (d.getWidth() * 0.9); // 宽度设置为屏幕的0.8
+		}else{
+			p.height = xy.y;
+			p.width = xy.x; 
+		}
 		window.setAttributes(p);
+		return dialog;
+	}
+	/**
+	 * 返回全屏显示的自定义dialog
+	 * @param a
+	 * @param view  需要显示的view
+	 * @return
+	 * @date 2015-10-9 下午4:51:52
+	 */
+	public static Dialog showFullScreenDialog(Activity a, View view) {
+		Dialog dialog = new Dialog(a, R.style.Dialog_Fullscreen);
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		view.setLayoutParams(params);
+		dialog.setContentView(view);
+		dialog.show();
 		return dialog;
 	}
 	public interface DialogAsk{

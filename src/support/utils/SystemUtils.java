@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import support.utils.bean.XY;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -27,6 +28,7 @@ import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -308,5 +310,19 @@ public class SystemUtils {
     public static boolean hasExternalCacheDir() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
     }
-    
+    /**
+     * 获取屏幕宽高数据
+     * @param context
+     * @return
+     * @date 2015-10-9 下午4:20:15
+     */
+    public static XY getScreenPixel(Context context){
+//    	DisplayMetrics dm = new DisplayMetrics();
+//    	((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+//    	XY xy = new XY(dm.widthPixels, dm.heightPixels);
+    	WindowManager m = ((Activity)context).getWindowManager();
+		Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+		XY xy = new XY(d.getWidth(), d.getHeight());
+    	return xy;
+    }
 }
